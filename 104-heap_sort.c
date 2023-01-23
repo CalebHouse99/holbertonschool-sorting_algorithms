@@ -15,6 +15,14 @@ void swap(int *a, int *b)
 	*b = temp;
 }
 
+/**
+ * heapify - creates a sorted heap array
+ *
+ * @array: array
+ * @sub_array_size: size of array
+ * @size: size of full array
+ * @i: heap root
+*/
 void heapify(int *array, int sub_array_size, size_t size, int i)
 {
 	int largest = i;
