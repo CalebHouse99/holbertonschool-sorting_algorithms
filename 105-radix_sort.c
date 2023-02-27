@@ -30,6 +30,7 @@ void counting_sort(int *array, size_t size, int place) {
 void radix_sort(int *array, size_t size) {
     int max = array[0];
     int prev_max_digits = 0;
+    int current_max_digits = 0; // Declare variable at top of block
     size_t i;
     int place;
 
@@ -42,7 +43,7 @@ void radix_sort(int *array, size_t size) {
     for (place = 1; max / place > 0; place *= 10) {
         counting_sort(array, size, place);
         
-        int current_max_digits = 0;
+        current_max_digits = 0; // Assign value here
         int temp_max = max;
         while (temp_max != 0) {
             current_max_digits++;
