@@ -40,4 +40,7 @@ void copy_array(int *array, int start, int end, int *tmp_arr);
 void recur_split(int *tmp_arr, int start, int end, int *array);
 void merge_it(int *array, int start, int mid, int end, int *tmp_arr);
 
+/* Radix sort*/
+void radix_sort(int *array, size_t size);
+
 #endif
