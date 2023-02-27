@@ -2,10 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_DIGITS 20
-
 void counting_sort(int *array, size_t size, int place) {
-    int *output = malloc(size * sizeof(int));
+    int *output = malloc(sizeof(int) * size);
     int count[10] = {0};
 
     for (size_t i = 0; i < size; i++) {
@@ -16,7 +14,7 @@ void counting_sort(int *array, size_t size, int place) {
         count[i] += count[i - 1];
     }
 
-    for (int i = size - 1; i >= 0; i--) {
+    for (int i = (int)size - 1; i >= 0; i--) {
         output[count[(array[i] / place) % 10] - 1] = array[i];
         count[(array[i] / place) % 10]--;
     }
@@ -57,3 +55,4 @@ void radix_sort(int *array, size_t size) {
         }
     }
 }
+
