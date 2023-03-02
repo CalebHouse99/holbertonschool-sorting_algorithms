@@ -42,7 +42,5 @@ void merge_it(int *array, int start, int mid, int end, int *tmp_arr);
 
 /* Radix sort*/
 void radix_sort(int *array, size_t size);
-int get_digit(int digit, int num);
-int digit_sort(int *array, size_t size, int digit);
 
 #endif

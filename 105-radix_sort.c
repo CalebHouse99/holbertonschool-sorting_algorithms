@@ -1,89 +1,99 @@
 #include "sort.h"
 
 /**
- * radix_sort - sorts array with radix sort
- *
- * @array: arr to sort
- * @size: size of arr to sort
-*/
-
-void radix_sort(int *array, size_t size)
+ * get_max - get the largest element from an array
+ * @array: array
+ * @size: size of array
+ * Return: max element
+ */
+int get_max(int *array, int size)
 {
-	int digit = 10, sorting = 1;
+	int max = array[0];
+	int i;
 
-	if (size == 1)
-		return;
-
-	while (1)
+	for (i = 1; i < size; i++)
 	{
-		sorting = digit_sort(array, size, digit);
-		if (!sorting)
-			break;
-		print_array(array, size);
-		digit *= 10;
+		if (array[i] > max)
+			max = array[i];
 	}
+	return (max);
 }
 
 /**
- * get_digit - returns specified digit of number
- *
- * @digit: digit to grab
- * 
- * @num: number to get digit from
- * Return: the number at the digit
-*/
-
-int get_digit(int digit, int num)
+ * malloc_and_allocate - malloc and fill an array
+ * @size: size of array
+ * Return: pointer to array
+ */
+int *malloc_and_allocate(int size)
 {
-	int sub_digit = digit / 10;
+	int i;
+	int *arr;
 
-	if (num / (digit / 10) == 0)
-		return (-1);
-	num = num % digit;
-	if (sub_digit > 1)
-		num = num / sub_digit;
-	return (num);
+	arr = malloc(sizeof(int) * (size));
+	if (!arr)
+		return (NULL);
+
+	for (i = 0; i < size; i++)
+		arr[i] = 0;
+	return (arr);
 }
 
 /**
- * digit_bubble_sort - uses bubble sort to sort array based on specified digit
- *
+ * sorting_out - sorting distribution
  * @array: array to sort
  * @size: size of array
- * @digit: digit to sort based on
- *
- * Return: 1 on successful sort, 0 if no more sorting needs to occur
-*/
-
-int digit_sort(int *array, size_t size, int digit)
+ * @place: current place sorting
+ * Return: void
+ */
+void sorting_out(int *array, int size, int place)
 {
-	int i, tmp, length = (int)size, status = 0, unsorted = 1;
+	int *matrix, *list, i;
 
-	for (i = 0; i < length; i++)
-	{
-		if (get_digit(digit, array[i]) >= 0)
-		{
-			status = 1;
-			break;
-		}
-	}
-	if (!status)
-		return (status);
+	matrix = malloc_and_allocate(10);
+	if (!matrix)
+		return;
 
-	while (unsorted)
+	for (i = 0; i < size; i++)
+		matrix[(array[i] / place) % 10]++;
+
+	for (i = 1; i < 10; i++)
+		matrix[i] = matrix[i] + matrix[i - 1];
+
+	list = malloc(sizeof(int) * (size));
+	if (!list)
+		return;
+
+	for (i = size - 1; i >= 0; i--)
 	{
-		unsorted = 0;
-		for (i = 0; i + 1 < length; i++)
-		{
-			if (get_digit(digit, array[i]) > get_digit(digit, array[i + 1]))
-			{
-				unsorted = 1;
-				tmp = array[i];
-				array[i] = array[i + 1];
-				array[i + 1] = tmp;
-			}
-		}
-		length--;
+		list[matrix[(array[i] / place) % 10] - 1] = array[i];
+		matrix[(array[i] / place) % 10]--;
 	}
-	return (status);
+
+	for (i = 0; i < size; i++)
+		array[i] = list[i];
+
+	free(list);
+	free(matrix);
+}
+
+/**
+ * radix_sort - sorts an array using radix sort
+ * @array: array to be sorted
+ * @size: size of array
+ * Return: void
+ */
+void radix_sort(int *array, size_t size)
+{
+	int place, max;
+
+	if (!array || size < 2)
+		return;
+
+	max = get_max(array, size);
+
+	for (place = 1; max / place > 0; place *= 10)
+	{
+		sorting_out(array, size, place);
+		print_array(array, size);
+	}
 }
